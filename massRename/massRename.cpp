@@ -9,7 +9,7 @@
     @param filesString A string of files delimited by a comma. 
     @return A vector of all the file names.
 */
-std::vector<std::string> listFiles(std::string filesString); 
+std::vector<std::string> listFiles(std::string t_filesString); 
 
 /**
     Renames the files given by the listFiles function.
@@ -18,7 +18,7 @@ std::vector<std::string> listFiles(std::string filesString);
     @param print Boolean of whether to print diagnostics of the function.
     @return void
 */
-void renameFiles(std::vector<std::string> inputs, std::vector<std::string> outputs, bool print);
+void renameFiles(std::vector<std::string> t_inputs, std::vector<std::string> t_outputs, bool t_print);
 
 int main(int argc, char* argv[])
 {
