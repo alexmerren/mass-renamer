@@ -1,103 +1,96 @@
+#include <tuple>
 #include <vector> 
 #include <iostream> 
-#include <chrono> 
 #include <cstdio>
-#include <cstring>
+#include <sstream>
+#include <filesystem>
+#include <stdlib.h>
 
 /**
-    Splits the input string into the individual files.
-    @param filesString A string of files delimited by a comma. 
-    @return A vector of all the file names.
+    Function to check the amount of parameters given to the file.
+    @param t_amountOfParams the amount of params given to the file.
 */
-std::vector<std::string> listFiles(std::string t_filesString); 
+void checkParams(int t_amountOfArgs);
 
 /**
-    Renames the files given by the listFiles function.
-    @param inputs A vector of the existing file names in the directory. 
-    @param outputs A vector of the wanted file names in the directory.
-    @param print Boolean of whether to print diagnostics of the function.
-    @return void
+    Function to split a given string into a vector of strings.
+    @param t_filesString A string of files delimited by a comma.
+    @return filesArr A vector of the files in the string. 
 */
-void renameFiles(std::vector<std::string> t_inputs, std::vector<std::string> t_outputs, bool t_print);
+std::vector<std::string> splitString(std::string t_filesString); 
+
+/**
+    Function to rename files given in two vectors split by splitString.
+    @param t_input A vector of the input file names.
+    @param t_output A vector of the output file names.
+*/
+void renameFiles(std::vector<std::string> t_input, std::vector<std::string> t_output);
 
 int main(int argc, char* argv[])
 {
-    if (argc == 1)
-    {
-        std::printf("Please enter a file name.\n");
-        return 1;
-    }
+    // Check that the right amount of params are being passed to the file.
+    checkParams(argc);
 
-    int start = 1;
-    bool verbose = false;
+    // Get a vector of the input files and the output files.
+    std::vector<std::string> inputs = splitString(argv[1]); 
+    std::vector<std::string> outputs = splitString(argv[2]); 
+   
+    // Rename the input files to the output files.
+    renameFiles(inputs, outputs);
     
-    if ((strcmp(argv[1],"-v")) == 0) 
-    {
-        start = 2;
-        verbose = true;
-    }
-    
-    std::vector<std::string> inputs = listFiles(argv[start]); 
-    std::vector<std::string> outputs = listFiles(argv[start+1]); 
-    renameFiles(inputs, outputs, verbose);
     return 0;
 }
 
-std::vector<std::string> listFiles(std::string t_filesString) 
+void checkParams(int t_amountOfArgs)
 {
-	// This is the array of all the files we are returning.
-	std::vector<std::string> filesArr; 
-	std::string file; 
-	std::string delimiter = ","; 
-	int pos = 0;
+    if (t_amountOfArgs == 1)
+    {
+        std::printf("Please enter a file name.\n");
+        exit(1); 
+    }
+}
 
-	while ((pos = t_filesString.find(delimiter)) != std::string::npos) 
-	{
-		file = t_filesString.substr(0,pos); 
-		filesArr.push_back(file);
-		t_filesString.erase(0, pos + delimiter.length()); 
-	}
-	filesArr.push_back(t_filesString); 
+std::vector<std::string> splitString(std::string t_filesString) 
+{
+	std::vector<std::string> filesArr;
+    std::string file;
+    std::stringstream stringstream(t_filesString);
+
+    // While loop to extract characters from 
+    // stringstream to file until it finds a comma.
+    while (getline(stringstream, file, ','))
+    {
+        filesArr.push_back(file);
+    }
 	return filesArr;
 }
 
-void renameFiles(std::vector<std::string> t_inputs, std::vector<std::string> t_outputs, bool t_print)
+
+void renameFiles(std::vector<std::string> t_input, std::vector<std::string> t_output)
 {
 	try
     {
-        // Get the first element in the t_inputs and t_outputs vectors.
-		auto inputsBegin = t_inputs.cbegin(); 
-		auto outputsBegin = t_outputs.cbegin(); 
-		// This starts the timing clock.
-		auto start = std::chrono::high_resolution_clock::now(); 
-        // This for loop goes through the input and t_outputs vectors, and renames them.
-		for (; inputsBegin != t_inputs.end() and outputsBegin != t_outputs.end(); inputsBegin++, outputsBegin++ ) 
+        // Create an iterator for the t_input vector and t_output vector.
+        std::vector<std::string>::const_iterator inputIterator, outputIterator;
+
+        // For loop to go through t_input and t_output and rename the files.
+		for (auto [inputIterator, outputIterator] = std::tuple{t_input.begin(), t_output.begin()};
+            inputIterator != t_input.end() && outputIterator != t_output.end();
+            ++inputIterator, ++outputIterator) 
 		{
-			// Convert std::string to const char*
-			const char* inputsBeginChar = inputsBegin->c_str(); 
-		    const char* outputsBeginChar = outputsBegin->c_str(); 
-            try 
-            {
-                std::rename(inputsBeginChar, outputsBeginChar);
-				if (t_print)
-                {
-                    std::printf("%s -> %s\n", inputsBeginChar, outputsBeginChar);  
-                }
+            // Check if the output file name already exists, if so, skip it.
+            if (std::filesystem::exists(outputIterator->c_str()))
+            {   
+                std::printf("Could not rename %1$s to %2$s, %2$s already exists\n",
+                            inputIterator->c_str(), outputIterator->c_str());
+                continue;
             }
-            catch (const std::exception& e)
-            {
-                std::perror("");
-            }
-        }
-		auto finish = std::chrono::high_resolution_clock::now(); 
-		std::chrono::duration<double> elapsed = finish - start; 
-        if (t_print) 
-        {
-		    std::printf( "Renaming took %f seconds.\n", elapsed.count() ); 
+            std::rename(inputIterator->c_str(), outputIterator->c_str());
+            std::printf("%s -> %s\n", inputIterator->c_str(), outputIterator->c_str()); 
         }
     }
     catch (const std::exception& e) 
     {	
-		std::printf("");
+		std::printf("There was an error in the program.");
 	}
 }
