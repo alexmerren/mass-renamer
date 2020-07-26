@@ -60,9 +60,10 @@ void renameFilesNumbered(std::vector<std::string>& t_input,
 
 int main(int argc, char* argv[])
 {
+
     // Check that the right amount of params are being passed to the file.
     isParamsAmountValid(argc);
-
+    
     if (strcmp(argv[1],"-n") == 0)
     {
         // If you type in the -n option, use the "numbered" function.
@@ -72,16 +73,14 @@ int main(int argc, char* argv[])
         int startNumber = atoi(argv[4]);
 
         renameFilesNumbered(inputs, newName, startNumber);
+        return 0;
     }
-    else 
-    {
-        // This is the default option, the "name specific" function.
-        std::vector<std::string> inputs = splitString(argv[1]); 
-        std::vector<std::string> outputs = splitString(argv[2]); 
-        areVectorSizesValid(inputs, outputs);
-
-        renameFiles(inputs, outputs);
-    }
+    // This is the default option, the "name specific" function.
+    std::vector<std::string> inputs = splitString(argv[1]); 
+    std::vector<std::string> outputs = splitString(argv[2]); 
+    areVectorSizesValid(inputs, outputs);
+    
+    renameFiles(inputs, outputs);
     return 0;
 }
 
