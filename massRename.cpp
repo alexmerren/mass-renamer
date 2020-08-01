@@ -9,7 +9,7 @@
     Function to check the amount of parameters given to the file.
     @param t_amountOfParams the amount of params given to the file.
 */
-void isParamsAmountValid(int& t_amountOfArgs);
+void isParamsAmountValid(int t_amountOfArgs);
 
 /**
     Function to check that the amount of strings in two vectors are the same.
@@ -24,21 +24,21 @@ void areVectorSizesValid(std::vector<std::string>& t_vector1,
     @param t_filename The filename that you want to get the extension of.
     @return string The extension of the file.
 */
-std::string getFileExtension(std::string& t_filename);
+std::string getFileExtension(std::string t_filename);
 
 /**
     Function to convert from std::vector<>::const_iterator to const char*.
     @param t_iterator The iterator that you want to convert.
     @return conversion The converted const char*.
 */
-const char* convertIterator(std::vector<std::string>::const_iterator&& t_iterator);
+const char* convertIterator(std::vector<std::string>::const_iterator t_iterator);
 
 /**
     Function to split a given string into a vector of strings.
     @param t_filesString A string of files delimited by a comma.
     @return filesArr A vector of the files in the string. 
 */
-std::vector<std::string> splitString(std::string&& t_filesString); 
+std::vector<std::string> splitString(std::string t_filesString); 
 
 /**
     Function to rename files given in two vectors split by splitString.
@@ -55,8 +55,8 @@ void renameFiles(std::vector<std::string>& t_input,
     @param t_startNumber An integer you wish the start the numbers at.
 */
 void renameFilesNumbered(std::vector<std::string>& t_input,
-                            std::string& t_newName,
-                            int& t_startNumber);
+                            std::string t_newName,
+                            int t_startNumber);
 
 int main(int argc, char* argv[])
 {
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void isParamsAmountValid(int& t_amountOfArgs)
+void isParamsAmountValid(int t_amountOfArgs)
 {
     if (t_amountOfArgs <= 2)
     {
@@ -103,7 +103,7 @@ void areVectorSizesValid(std::vector<std::string>& t_vector1,
     }
 }
 
-std::string getFileExtension(std::string& t_filename)
+std::string getFileExtension(std::string t_filename)
 {
     // Get the index of where the last period is, where the extension starts.
     int position = t_filename.find_last_of(".");
@@ -112,13 +112,13 @@ std::string getFileExtension(std::string& t_filename)
     return extension;
 }
 
-const char* convertIterator(std::vector<std::string>::const_iterator&& t_iterator)
+const char* convertIterator(std::vector<std::string>::const_iterator t_iterator)
 {
     const char* CONVERSION = t_iterator->c_str();
     return CONVERSION;
 }
 
-std::vector<std::string> splitString(std::string&& t_filesString) 
+std::vector<std::string> splitString(std::string t_filesString) 
 {
 	std::vector<std::string> filesArr;
     std::string file;
@@ -169,8 +169,8 @@ void renameFiles(std::vector<std::string>& t_input,
 }
 
 void renameFilesNumbered(std::vector<std::string>& t_input,
-                            std::string& t_newName,
-                            int& t_startNumber)
+                            std::string t_newName,
+                            int t_startNumber)
 {
     std::string startNumberString, newFile, extension;
 
