@@ -1,11 +1,25 @@
 # Rename
-A C++ version of a mass renaming tool I created to help me rename a bunch of files at once.
+A C++ utility that is used to possibly rename many files at once.
 
-## Getting started
-You need to compile the source code into something usable by your machine.
-In order to compile, you must use some flags depending on what system you are on.
-- macOS: `clang++ massRename.cpp -o massRename -std=c++17`
-- Linux: `clang++ massRename.cpp -o massRename -std=c++17 -lstdc++fs`
+## Compilation
+In order to compile the program:
 
-## To do
-- [ ] Get functionality to Windows.
+```bash
+$ clang++ massRename.cpp -o rename -std=c++17
+```
+
+If compiling on Linux, then you need to enable to experimental flag `-lstdc++fs`.
+
+## Usage
+In order to run the program:
+```bash
+./rename file1,file2,fil3 file4,file5,file6
+```
+
+This will rename:
+ - file1 to file4,
+ - file2 to file5,
+ - file3 to file6.
+
+## To do 
+ - [ ] Add functionality for specifying one name for all renamed files
