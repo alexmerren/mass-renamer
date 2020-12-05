@@ -5,10 +5,16 @@ A C++ utility that is used to possibly rename many files at once.
 In order to compile the program:
 
 ```bash
-$ clang++ massRename.cpp -o rename -std=c++17
+$ clang++ src/rename.cpp -o out/rename -std=c++17
 ```
 
 If compiling on Linux, then you need to enable to experimental flag `-lstdc++fs`.
+
+Alternatively, you can run the compile script with:
+
+```bash
+$ ./compile
+```
 
 ## Usage
 In order to run the program:
