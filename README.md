@@ -29,3 +29,4 @@ This will rename:
 
 ## To do 
  - [ ] Add functionality for specifying one name for all renamed files
+ - [ ] Improve performance 
